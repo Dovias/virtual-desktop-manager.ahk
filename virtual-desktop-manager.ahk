@@ -38,7 +38,7 @@ ActivateAndMoveWindowToToggledDesktop(window, desktop) {
         return
     }
 
-    ActivateAndMoveWindowToDesktop(window, desktop)
+    MoveWindowToDesktop(window, desktop)
     ToggleIntoDesktop(desktop)
     WinActivate(window)
 }
@@ -243,7 +243,7 @@ WindowMatchesRule(window, rule) {
 }
 
 
-ActivateAndMoveWindowToDesktop(window, desktop) {
+MoveWindowToDesktop(window, desktop) {
     static address := GetVirtualDesktopFunctionAddress("MoveWindowToDesktopNumber")
     return DllCall(address, "UInt", window, "UInt", desktop - 1, "Int")
 }
@@ -251,7 +251,7 @@ ActivateAndMoveWindowToDesktop(window, desktop) {
 
 _ActivateAndMoveWindowToSwitchedDesktop(window, desktop) {
     SwitchToDesktop(desktop)
-    ActivateAndMoveWindowToDesktop(window, desktop)
+    MoveWindowToDesktop(window, desktop)
     WinActivate(window)
 }
 
