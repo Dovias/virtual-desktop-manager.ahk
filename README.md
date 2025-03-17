@@ -91,7 +91,13 @@ desktops := {
 > [!NOTE]  
 > Not every build of Windows 10 and 11 is supported. Due to how much time it takes to reverse-engineer undocumented Windows API's, It might take some time for the version dedicated to your operating system to show up. Be patient.
 - Download [virtual-desktop-manager.ahk](https://github.com/Dovias/virtual-desktop-manager.ahk/blob/main/virtual-desktop-manager.ahk) from this repository.
-- Put downloaded `VirtualDesktopAccessor.dll` and `virtual-desktop-manager.ahk` under a single folder
+- Put downloaded `VirtualDesktopAccessor.dll` and `virtual-desktop-manager.ahk` under a single folder.
+- Tweak `virtual-desktop-manager.ahk` script by adjusting keybinds to existing virtual desktops on the computer.
 - Run `virtual-desktop-manager.ahk` by just double clicking the file and you are good to go!
 
 **OPTIONAL:** You can add this script to `%appdata%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` to make this script run when user is being logged in.
+
+# Known issues
+### Taskbar sometimes flashing when switching between virtual desktops
+This is a known issue with Virtual Desktop API that's being exposed via `VirtualDesktopAccessor.dll` library. Check out [this](https://github.com/Ciantic/VirtualDesktopAccessor/issues/101) issue on github for workarounds and the progress of this problem.
+
