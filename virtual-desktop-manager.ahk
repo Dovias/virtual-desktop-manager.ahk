@@ -3,7 +3,7 @@
 
 ; ======================================================================
 ; virtual-desktop-manager.ahk
-; (https://github.com/Dovias)
+; (https://github.com/Dovias/virtual-desktop-manager.ahk)
 ;
 ; Below is an example configuration section. Feel free to bind your
 ; hotkeys and functions through simple AutoHotkey v2 syntax.
