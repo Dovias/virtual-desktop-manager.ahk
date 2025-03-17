@@ -86,18 +86,18 @@ desktops := {
 > [!CAUTION]  
 > This project is relying upon Microsoft Windows undocumented Virtual Desktop API. Note that this API is prone to break over updates and is not completely stable.
 
-- Download and install AutoHotkey v2. You can download this version of autohotkey by clicking [this link](https://www.autohotkey.com/download/ahk-v2.exe).
-- Download `VirtualDesktopAccessor.dll` library that's suited for your Operating System version and build. You can download specific version of this libarary by clicking [this link](https://github.com/Ciantic/VirtualDesktopAccessor/releases)
+- Download and install [AutoHotkey v2](https://www.autohotkey.com/download/ahk-v2.exe) which is needed for this script to be run.
+- Download [VirtualDesktopAccessor](https://github.com/Ciantic/VirtualDesktopAccessor/releases) library that's suited for your operating system version and build.
 > [!NOTE]  
-> Not every build of Windows 10 and 11 is supported. Due to how much time it takes to reverse-engineer undocumented Windows API's, It might take some time for the version dedicated to your operating system to show up. Be patient.
+> **VirtualDesktopAccessor does not support every single build of Windows 10 and 11.** Due to how much time it takes to reverse-engineer undocumented Windows API's, It might take some time for the version dedicated to your operating system to show up. Be patient.
 - Download [virtual-desktop-manager.ahk](https://github.com/Dovias/virtual-desktop-manager.ahk/blob/main/virtual-desktop-manager.ahk) from this repository.
 - Put downloaded `VirtualDesktopAccessor.dll` and `virtual-desktop-manager.ahk` under a single folder.
 - Tweak `virtual-desktop-manager.ahk` script by adjusting keybinds to existing virtual desktops on the computer.
 - Run `virtual-desktop-manager.ahk` by just double clicking the file and you are good to go!
 
 ### Optional recommendations:
-- Install [ExplorerTabUtility](https://github.com/w4po/ExplorerTabUtility) to automatically nest the file explorer tabs under one file explorer window instance
-- Install [AltSnap](https://github.com/w4po/ExplorerTabUtility) in order to have an ability to drag and resize windows using `Windows` key
+- Install [ExplorerTabUtility](https://github.com/w4po/ExplorerTabUtility) to automatically nest the file explorer tabs under one file explorer window instance.
+- Install [AltSnap](https://github.com/RamonUnch/AltSnap) in order to have an ability to drag and resize windows using `Alt` or `Windows` key.
 - Add this script to `%appdata%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` to make this script run when user is being logged in.
 
 # Known issues
