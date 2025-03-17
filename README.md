@@ -1,7 +1,7 @@
-# virtual-desktop-manager.ahk
+# 🗂️ virtual-desktop-manager.ahk
 Simple AutoHotkey v2 script which allows you to have fine grain control of Windows 10/11 virtual desktops.
 
-## Features
+## Features 
 - Bindable switching between virtual desktops
 ```ahk
 #a::SwitchToDesktop(1)
@@ -95,12 +95,17 @@ desktops := {
 - Tweak `virtual-desktop-manager.ahk` script by adjusting keybinds to existing virtual desktops on the computer.
 - Run `virtual-desktop-manager.ahk` by just double clicking the file and you are good to go!
 
-### Optional recommendations:
-- Install [ExplorerTabUtility](https://github.com/w4po/ExplorerTabUtility) to automatically nest the file explorer tabs under one file explorer window instance.
+## Optional recommendations
+- Install [ExplorerTabUtility](https://github.com/w4po/ExplorerTabUtility)  (Windows 11 only) to automatically nest the file explorer tabs under one file explorer window instance.
 - Install [AltSnap](https://github.com/RamonUnch/AltSnap) in order to have an ability to drag and resize windows using `Alt` or `Windows` key.
 - Add this script to `%appdata%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` to make this script run when user is being logged in.
 
-# Known issues
+## Known issues
 ### Taskbar sometimes flashing when switching between virtual desktops
 This is a known issue with Virtual Desktop API that's being exposed via `VirtualDesktopAccessor.dll` library. Check out [this](https://github.com/Ciantic/VirtualDesktopAccessor/issues/101) issue on github for workarounds and the progress of this problem.
 
+## Contributing
+Contributions are welcome! Feel free to submit issues and pull requests.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
