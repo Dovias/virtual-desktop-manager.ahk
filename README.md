@@ -84,7 +84,7 @@ desktops := {
 
 ## Installation
 > [!CAUTION]  
-> This project is relying upon Microsoft Windows undocumented Virtual Desktop API's. Note that this API is prone to break over updates and is not completely stable.
+> This project is relying upon Microsoft Windows undocumented Virtual Desktop API. Note that this API is prone to break over updates and is not completely stable.
 
 - Download and install AutoHotkey v2. You can download this version of autohotkey by clicking [this link](https://www.autohotkey.com/download/ahk-v2.exe).
 - Download `VirtualDesktopAccessor.dll` library that's suited for your Operating System version and build. You can download specific version of this libarary by clicking [this link](https://github.com/Ciantic/VirtualDesktopAccessor/releases)
@@ -95,7 +95,10 @@ desktops := {
 - Tweak `virtual-desktop-manager.ahk` script by adjusting keybinds to existing virtual desktops on the computer.
 - Run `virtual-desktop-manager.ahk` by just double clicking the file and you are good to go!
 
-**OPTIONAL:** You can add this script to `%appdata%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` to make this script run when user is being logged in.
+### Optional recommendations:
+- Install [ExplorerTabUtility](https://github.com/w4po/ExplorerTabUtility) to automatically nest the file explorer tabs under one file explorer window instance
+- Install [AltSnap](https://github.com/w4po/ExplorerTabUtility) in order to have an ability to drag and resize windows using `Windows` key
+- Add this script to `%appdata%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` to make this script run when user is being logged in.
 
 # Known issues
 ### Taskbar sometimes flashing when switching between virtual desktops
