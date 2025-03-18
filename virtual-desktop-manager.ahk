@@ -32,25 +32,30 @@ desktops := {
     1: [
         ; Open all file explorer windows in first virtual desktop except for legacy control panel
         {
-            process: "explorer",
+            process: "^explorer\.exe$",
             title: "^(?!Control Panel(?:\\[^\\]+)*$).*$",
-            class: "CabinetWClass"
+            class: "^CabinetWClass$"
         },
         {
-            process: "WindowsTerminal|cmd|powershell|pwsh|7zFM|WinRAR"
+            process: "^(?:WindowsTerminal|cmd|powershell|pwsh|devenv|idea64|Code|VSCodium|7zFM|WinRAR)\.(?i)exe$"
         }
     ],
     2: [
         {
-            process: "Discord|Vesktop",
+            process: "^(?:Discord|Vesktop)\.(?i)exe$",
             action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow() and FocusWindow()
          }
     ],
     3: [
         {
-            process: "chrome|brave|vivaldi|opera|firefox|librewolf|floorp",
+            process: "^(?:chrome|brave|vivaldi|opera|firefox|librewolf|floorp)\.(?i)exe$",
             action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow() and FocusWindow()
                 
+        }
+    ],
+    4: [
+        {
+            process: "^(?:WINWORD|POWERPNT|EXCEL|soffice|sbase|scalc|sdraw|simpress|smath|swriter)\.(?i)exe$"
         }
     ]
 }
