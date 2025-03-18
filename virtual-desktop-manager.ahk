@@ -9,44 +9,24 @@
 ; hotkeys and functions through simple AutoHotkey v2 syntax.
 ; ======================================================================
 
-#q::GracefullyCloseWindow(GetFocusedWindow())
-#e::ToggleWindowPinnedState(GetFocusedWindow())
-#w::WinSetAlwaysOnTop(-1, GetFocusedWindow())
-#f::ToggleWindowMaximizedState(GetFocusedWindow())
-
 #a::SwitchToDesktop(1)
+#+a::SwitchToDesktop(1) and MoveWindowToDesktop() and FocusWindow()
+
 #s::SwitchToDesktop(2)
+#+s::SwitchToDesktop(2) and MoveWindowToDesktop() and FocusWindow()
+
 #d::SwitchToDesktop(3)
+#+d::SwitchToDesktop(3) and MoveWindowToDesktop() and FocusWindow()
+
 #x::ToggleIntoDesktop(4)
+#+x::ToggleIntoDesktop(4) and MoveWindowToDesktop() and FocusWindow()
 
-#+e::ToggleApplicationPinnedState(GetFocusedWindow())
-#+a::ActivateAndMoveWindowToSwitchedDesktop(GetFocusedWindow(), 1)
-#+s::ActivateAndMoveWindowToSwitchedDesktop(GetFocusedWindow(), 2)
-#+d::ActivateAndMoveWindowToSwitchedDesktop(GetFocusedWindow(), 3)
-#+x::ActivateAndMoveWindowToToggledDesktop(GetFocusedWindow(), 4)
+#e::ToggleWindowPinnedState()
+#+e::ToggleApplicationPinnedState()
+#w::ToggleWindowAlwaysOnTopState()
+#f::ToggleWindowMaximizedState()
 
-ActivateAndMoveWindowToSwitchedDesktop(window, desktop) {
-    if (!WinExist(window)) {
-        return
-    }
-
-    _ActivateAndMoveWindowToSwitchedDesktop(window, desktop)
-}
-
-ActivateAndMoveWindowToToggledDesktop(window, desktop) {
-    if (!WinExist(window)) {
-        return
-    }
-
-    MoveWindowToDesktop(window, desktop)
-    ToggleIntoDesktop(desktop)
-    WinActivate(window)
-}
-
-ActivateMaximizeAndMoveWindowToSwitchedDesktop(window, desktop) {
-    ActivateAndMoveWindowToSwitchedDesktop(window, desktop)
-    TryToMaximizeWindow(window)
-}
+#q::GracefullyCloseWindow()
 
 desktops := {
     1: [
@@ -56,26 +36,24 @@ desktops := {
             title: "^(?!Control Panel(?:\\[^\\]+)*$).*$",
             class: "CabinetWClass"
         },
-
         {
-            process: "WindowsTerminal|cmd|powershell|pwsh|7zFM"
+            process: "WindowsTerminal|cmd|powershell|pwsh|7zFM|WinRAR"
         }
     ],
     2: [
         {
             process: "Discord|Vesktop",
-            action: ActivateMaximizeAndMoveWindowToSwitchedDesktop
+            action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow() and FocusWindow()
          }
     ],
     3: [
         {
             process: "chrome|brave|vivaldi|opera|firefox|librewolf|floorp",
-            action: ActivateMaximizeAndMoveWindowToSwitchedDesktop
+            action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow() and FocusWindow()
                 
         }
     ]
 }
-
 
 ; ======================================================================
 ; Implementation logic.
@@ -88,7 +66,17 @@ GetFocusedWindow() {
     return WinExist("A")
 }
 
-GracefullyCloseWindow(window) {
+FocusWindow(window := focused) {
+    if (!WinExist(window)) {
+        return false
+    }
+
+    WinActivate(window)
+    return true
+}
+
+
+GracefullyCloseWindow(window := GetFocusedWindow()) {
     if (!WinExist(window)) {
         return
     }
@@ -102,7 +90,7 @@ GracefullyCloseWindow(window) {
     PostMessage(0x0112, 0xF060,,, window)
 }
 
-IsAlwaysOnTop(window) {
+IsWindowAlwaysOnTop(window) {
     ; Check if window is always on top of the window stack
     ;
     ; Magic values:
@@ -113,17 +101,17 @@ IsAlwaysOnTop(window) {
 ; Wraps `WinMaximize` function in a way that it would not to try to maximize window which does not
 ; exist or is already maximized.
 ;
-; Some applications remember their previous window state, for example "File Explorer".
+; Some applications remember their toggled window state, for example "File Explorer".
 ; This function prevents unnecessary state restoring that AutoHotkey does to remaximize window
 ; with `WinMaximize` function.
-TryToMaximizeWindow(window) {
+MaximizeWindow(window := GetFocusedWindow()) {
     if (WinExist(window) and !WinGetMinMax(window)) {
         WinMaximize(window)
     }
 }
 
 
-ToggleWindowMaximizedState(window) {
+ToggleWindowMaximizedState(window := GetFocusedWindow()) {
     if (!WinExist(window)) {
         return
     }
@@ -135,33 +123,32 @@ ToggleWindowMaximizedState(window) {
     }
 }
 
-global previous := 0
+global toggled := 0
 ToggleIntoDesktop(desktop) {
-    global previous
-    if (previous != 0) {
-        SwitchToDesktop(previous)
+    global toggled
+    if (toggled != 0) {
+        desktop := toggled
+        toggled := 0
     } else {
-        previous := GetCurrentDesktopNumber()
-        _SwitchToDesktop(desktop)
+        toggled := GetCurrentDesktopNumber()
     }
+
+    global focused := GetFocusedWindow()
+    _SwitchToDesktop(desktop)
+    return desktop
 }
 
-ToggleApplicationPinnedState(window) {
-    if (!WinExist(window)) {
-        return
-    }
-
+ToggleApplicationPinnedState(window := GetFocusedWindow()) {
     return IsApplicationPinned(window) ? !UnpinApplication(Window) : PinApplication(window)
 }
 
-ToggleWindowPinnedState(window) {
-    if (!WinExist(window)) {
-        return
-    }
-
+ToggleWindowPinnedState(window := GetFocusedWindow()) {
     return IsWindowPinned(window) ? !UnpinWindow(window) : PinWindow(window)
 }
 
+ToggleWindowAlwaysOnTopState(window := GetFocusedWindow()) {
+    return WinSetAlwaysOnTop(-1, window)
+}
 
 GetVirtualDesktopFunctionAddress(name) {
     static address := DllCall("LoadLibrary", "Str", "VirtualDesktopAccessor.dll", "Ptr")
@@ -189,7 +176,7 @@ PinWindow(window) {
 }
 
 UnpinApplication(window) {
-    static address := GetVirtualDesktopFunctionAddress("UnpinApp")
+    static address := GetVirtualDesktopFunctionAddress("UnPinApp")
     return DllCall(address, "UInt", window, "Int")
 }
 
@@ -214,19 +201,27 @@ _RegisterWindowMessage(message) {
 
 _SwitchToDesktop(desktop) {
     static address := GetVirtualDesktopFunctionAddress("GoToDesktopNumber")
-    return DllCall(address, "Int", desktop - 1, "Int")
+    DllCall(address, "Int", desktop - 1)
 }
 
 SwitchToDesktop(desktop) {
-    if (desktop == GetCurrentDesktopNumber()) {
-        return
+    current := GetCurrentDesktopNumber()
+    if (desktop == current) {
+        return false
     }
-    ; Reset previous desktop if we switched the desktop directly
+    ; Reset toggled desktop if we switched the desktop directly
     ; 
     ; This is needed to reset the toggled desktop state if we
     ; did not called toggle function prior calling this function
-    global previous := 0
+    global toggled := 0
+    global focused := GetFocusedWindow()
     _SwitchToDesktop(desktop)
+    return true
+}
+
+MoveWindowToDesktop(window := focused, desktop := GetCurrentDesktopNumber()) {
+    static address := GetVirtualDesktopFunctionAddress("MoveWindowToDesktopNumber")
+    return DllCall(address, "UInt", window, "UInt", desktop - 1, "Int") > 0
 }
 
 
@@ -241,19 +236,6 @@ WindowMatchesRule(window, rule) {
                ValueMatchesRuleProperty(WinGetTitle(window), rule, "title")
     catch
         return false
-}
-
-
-MoveWindowToDesktop(window, desktop) {
-    static address := GetVirtualDesktopFunctionAddress("MoveWindowToDesktopNumber")
-    return DllCall(address, "UInt", window, "UInt", desktop - 1, "Int")
-}
-
-
-_ActivateAndMoveWindowToSwitchedDesktop(window, desktop) {
-    SwitchToDesktop(desktop)
-    MoveWindowToDesktop(window, desktop)
-    WinActivate(window)
 }
 
 DllCall("RegisterShellHookWindow", "UInt", A_ScriptHwnd)
@@ -274,7 +256,7 @@ _OnWindowCreate(flag, window, *) {
             }
 
             WinWait(window)
-            action := HasProp(rule, "action") ? rule.action : _ActivateAndMoveWindowToSwitchedDesktop
+            action := HasProp(rule, "action") ? rule.action : (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and FocusWindow()
             action.Call(window, desktop)
         }
     }
