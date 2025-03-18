@@ -52,23 +52,24 @@ desktops := {
     1: [
         ; Open all file explorer windows in first virtual desktop except for legacy control panel
         {
-            process: "explorer.exe",
-            title: "^(?!Control Panel$).*$",
+            process: "explorer",
+            title: "^(?!Control Panel(?:\\[^\\]+)*$).*$",
+            class: "CabinetWClass"
         },
 
         {
-            process: "WindowsTerminal.exe|cmd.exe|powershell.exe|pwsh.exe"
+            process: "WindowsTerminal|cmd|powershell|pwsh|7zFM|"
         }
     ],
     2: [
         {
-            process: "Vesktop.exe",
+            process: "Discord|Vesktop",
             action: ActivateMaximizeAndMoveWindowToSwitchedDesktop
          }
     ],
     3: [
         {
-            process: "chrome.exe",
+            process: "chrome|brave|vivaldi|opera|firefox|librewolf|floorp",
             action: ActivateMaximizeAndMoveWindowToSwitchedDesktop
                 
         }
