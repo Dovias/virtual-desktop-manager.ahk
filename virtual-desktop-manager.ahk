@@ -58,7 +58,7 @@ desktops := {
         },
 
         {
-            process: "WindowsTerminal|cmd|powershell|pwsh|7zFM|"
+            process: "WindowsTerminal|cmd|powershell|pwsh|7zFM"
         }
     ],
     2: [
