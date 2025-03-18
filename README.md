@@ -41,7 +41,7 @@ Simple AutoHotkey v2 script which allows you to have fine grain control of Windo
 #w::ToggleWindowAlwaysOnTopState()
 ```
 ![explorer_RLA3URX3hB](https://github.com/user-attachments/assets/b3099b18-8ec5-456e-a6b1-09054851d1e0)
-- Window rules which allow you define how the application needs to places in specific virtual desktop in window creation phase
+- Window rules which allow you define how the application needs to be placed in specific virtual desktops during window creation phase
 ```ahk
 desktops := {
     1: [
