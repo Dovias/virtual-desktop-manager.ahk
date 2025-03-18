@@ -104,7 +104,7 @@ IsWindowAlwaysOnTop(window) {
 ; Some applications remember their toggled window state, for example "File Explorer".
 ; This function prevents unnecessary state restoring that AutoHotkey does to remaximize window
 ; with `WinMaximize` function.
-MaximizeWindow(window := GetFocusedWindow()) {
+MaximizeWindow(window := focused) {
     if (WinExist(window) and !WinGetMinMax(window)) {
         WinMaximize(window)
     }
@@ -167,22 +167,22 @@ GetCurrentDesktopNumber() {
 
 PinApplication(window) {
     static address := GetVirtualDesktopFunctionAddress("PinApp")
-    return DllCall(address, "UInt", window, "Int")
+    DllCall(address, "UInt", window)
 }
 
 PinWindow(window) {
     static address := GetVirtualDesktopFunctionAddress("PinWindow")
-    return DllCall(address, "UInt", window, "Int")
+    DllCall(address, "UInt", window)
 }
 
 UnpinApplication(window) {
     static address := GetVirtualDesktopFunctionAddress("UnPinApp")
-    return DllCall(address, "UInt", window, "Int")
+    DllCall(address, "UInt", window)
 }
 
 UnpinWindow(window) {
     static address := GetVirtualDesktopFunctionAddress("UnPinWindow")
-    return DllCall(address, "UInt", window, "Int")
+    DllCall(address, "UInt", window)
 }
 
 IsApplicationPinned(window) {
@@ -225,15 +225,21 @@ MoveWindowToDesktop(window := focused, desktop := GetCurrentDesktopNumber()) {
 }
 
 
-ValueMatchesRuleProperty(value, rule, property) {
+_ValueMatchesRuleRegexProperty(value, rule, property) {
     return !HasProp(rule, property) or RegExMatch(value, rule.%property%)
 }
 
-WindowMatchesRule(window, rule) {
+_ValueMatchesBitmaskRuleProperty(value, rule, property) {
+    return !HasProp(rule, property) or value & rule.%property% == rule.%property%
+}
+
+_WindowMatchesRule(window, rule) {
     try
-        return ValueMatchesRuleProperty(WinGetProcessName(window), rule, "process") and
-               ValueMatchesRuleProperty(WinGetClass(window), rule, "class") and
-               ValueMatchesRuleProperty(WinGetTitle(window), rule, "title")
+        return _ValueMatchesRuleRegexProperty(WinGetProcessName(window), rule, "process")
+           and _ValueMatchesRuleRegexProperty(WinGetClass(window), rule, "class")
+           and _ValueMatchesRuleRegexProperty(WinGetTitle(window), rule, "title")
+           and _ValueMatchesBitmaskRuleProperty(WinGetStyle(window), rule, "style")
+           and _ValueMatchesBitmaskRuleProperty(WinGetExStyle(window), rule, "exStyle")
     catch
         return false
 }
@@ -251,7 +257,7 @@ _OnWindowCreate(flag, window, *) {
 
     for desktop, rules in desktops.OwnProps() {
         for rule in rules {
-            if (!WindowMatchesRule(window, rule)) {
+            if (!_WindowMatchesRule(window, rule)) {
                 continue
             }
 
