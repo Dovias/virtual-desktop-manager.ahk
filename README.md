@@ -5,8 +5,6 @@ Simple AutoHotkey v2 script which allows you to have fine grain control of Windo
 - Bindable switching between virtual desktops
 ```ahk
 #a::SwitchToDesktop(1)
-#s::SwitchToDesktop(2)
-#d::SwitchToDesktop(3)
 ```
 ![chrome_tFTwkk16hM](https://github.com/user-attachments/assets/e5459704-790a-4ab2-a2bf-8e6338ed5dbb)
 - Bindable toggling between virtual desktops
@@ -17,42 +15,34 @@ Simple AutoHotkey v2 script which allows you to have fine grain control of Windo
 
 - Bindable movement of windows to specific virtual desktops
 ```ahk
-#+a::ActivateAndMoveWindowToSwitchedDesktop(GetFocusedWindow(), 1)
-#+s::ActivateAndMoveWindowToSwitchedDesktop(GetFocusedWindow(), 2)
-#+d::ActivateAndMoveWindowToSwitchedDesktop(GetFocusedWindow(), 3)
-#+x::ActivateAndMoveWindowToToggledDesktop(GetFocusedWindow(), 4)
+#+a::SwitchToDesktop(1) and MoveWindowToDesktop() and FocusWindow()
 ```
 ![explorer_qNFcuCmEf4](https://github.com/user-attachments/assets/8d8d1710-6c22-4ff3-929b-890a6ea91847)
 
 - Bindable window pinning which can be visible across all virtual desktops
 ```ahk
-#e::ToggleWindowPinnedState(GetFocusedWindow())
-#+e::ToggleApplicationPinnedState(GetFocusedWindow())
+#e::ToggleWindowPinnedState()
+#+e::ToggleApplicationPinnedState()
 ```
 ![explorer_IC2mWCf6VT](https://github.com/user-attachments/assets/96c8fd60-b18c-4a08-85fd-d5c32a25048c)
 
 - Bindable fullscreen window toggle
 ```ahk
-#f::ToggleWindowMaximizedState(GetFocusedWindow())
+#f::ToggleWindowMaximizedState()
 ```
 ![explorer_iZnQR7zqyt](https://github.com/user-attachments/assets/067cf8ca-65d1-4b64-a6f6-acf0275c9f31)
 - Bindable graceful close window toggle (Acts if close button was pressed and not like ALT+F4)
 ```ahk
-#f::ToggleWindowMaximizedState(GetFocusedWindow())
+#q::GracefullyCloseWindow()
 ```
 ![explorer_1kF7TINDwm](https://github.com/user-attachments/assets/912ab2bb-817a-4c31-b2a8-402f6739ba73)
 - Bindable always on top window toggle
 ```ahk
-#w::WinSetAlwaysOnTop(-1, GetFocusedWindow())
+#w::ToggleWindowAlwaysOnTopState()
 ```
 ![explorer_RLA3URX3hB](https://github.com/user-attachments/assets/b3099b18-8ec5-456e-a6b1-09054851d1e0)
 - Window rules which allow you define how the application needs to places in specific virtual desktop in window creation phase
 ```ahk
-ActivateMaximizeAndMoveWindowToSwitchedDesktop(window, desktop) {
-    ActivateAndMoveWindowToSwitchedDesktop(window, desktop)
-    TryToMaximizeWindow(window)
-}
-
 desktops := {
     1: [
         ; Open all file explorer windows in first virtual desktop except for legacy control panel
@@ -61,21 +51,20 @@ desktops := {
             title: "^(?!Control Panel(?:\\[^\\]+)*$).*$",
             class: "CabinetWClass"
         },
-
         {
-            process: "WindowsTerminal|cmd|powershell|pwsh|7zFM|"
+            process: "WindowsTerminal|cmd|powershell|pwsh|7zFM|WinRAR"
         }
     ],
     2: [
         {
             process: "Discord|Vesktop",
-            action: ActivateMaximizeAndMoveWindowToSwitchedDesktop
+            action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow() and FocusWindow()
          }
     ],
     3: [
         {
             process: "chrome|brave|vivaldi|opera|firefox|librewolf|floorp",
-            action: ActivateMaximizeAndMoveWindowToSwitchedDesktop
+            action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow() and FocusWindow()
                 
         }
     ]
