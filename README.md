@@ -93,11 +93,12 @@ desktops := {
 ## Optional recommendations
 - Install [ExplorerTabUtility](https://github.com/w4po/ExplorerTabUtility)  (Windows 11 only) to automatically nest the file explorer tabs under one file explorer window instance.
 - Install [AltSnap](https://github.com/RamonUnch/AltSnap) in order to have an ability to drag and resize windows using `Alt` or `Windows` key.
-- Add this script to `%appdata%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` to make this script run when user is being logged in.
+- Launching this script via administrator privileges will allow to handle applications which were launched using administrator privileges. 
+- Use Task Scheduler to create a task which launches this script at startup, or add this script to `%appdata%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup`.
 
 ## Known issues
 ### Taskbar sometimes flashing when switching between virtual desktops
-This is a known issue with Virtual Desktop API that's being exposed via `VirtualDesktopAccessor.dll` library. Check out [this](https://github.com/Ciantic/VirtualDesktopAccessor/issues/101) issue on github for workarounds and the progress of this problem.
+This is a known issue with Virtual Desktop API that's being exposed via `VirtualDesktopAccessor.dll` library. Check out [this](https://github.com/Ciantic/VirtualDesktopAccessor/issues/101) issue on GitHub for workarounds and the progress of this problem.
 
 ## Contributing
 Contributions are welcome! Feel free to submit issues and pull requests.
