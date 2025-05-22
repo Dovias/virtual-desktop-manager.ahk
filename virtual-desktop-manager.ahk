@@ -43,13 +43,13 @@ desktops := {
     2: [
         {
             process: "^(?:Discord|Vesktop)\.(?i)exe$",
-            action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow() and FocusWindow()
+            action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow()
          }
     ],
     3: [
         {
             process: "^(?:chrome|brave|vivaldi|opera|firefox|librewolf|floorp)\.(?i)exe$",
-            action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow() and FocusWindow()
+            action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow()
                 
         }
     ],
@@ -200,10 +200,6 @@ IsWindowPinned(window) {
     return DllCall(address, "UInt", window, "Int")
 }
 
-_RegisterWindowMessage(message) {
-    return DllCall("RegisterWindowMessage", "Str", message, "UInt")
-}
-
 _SwitchToDesktop(desktop) {
     static address := GetVirtualDesktopFunctionAddress("GoToDesktopNumber")
     DllCall(address, "Int", desktop - 1)
@@ -220,6 +216,11 @@ SwitchToDesktop(desktop) {
     ; did not called toggle function prior calling this function
     global toggled := 0
     global focused := GetFocusedWindow()
+
+    ; A hack to reset foreground window. Fixes an issue with
+    ; losing window focus when switching between virtual desktops.
+    DllCall("AllowSetForegroundWindow", "Int", -1)
+    
     _SwitchToDesktop(desktop)
     return true
 }
