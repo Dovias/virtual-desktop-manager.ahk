@@ -48,7 +48,7 @@ desktops := {
     ],
     3: [
         {
-            process: "^(?:chrome|brave|vivaldi|opera|firefox|librewolf|floorp)\.(?i)exe$",
+            process: "^(?:msedge|chrome|brave|vivaldi|opera|firefox|librewolf|floorp)\.(?i)exe$",
             action: (window, desktop) => SwitchToDesktop(desktop) and MoveWindowToDesktop(window) and MaximizeWindow()
                 
         }
